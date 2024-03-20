@@ -1,13 +1,13 @@
 <template>
     <div>
-
       <div v-if="!isQuizCompleted">
         <Question :title="currentQuestion.title" />
         <Answers :answers="currentQuestion.answers" @selectAnswer="handleAnswer" />
+        <!-- Bouton Précédent : n'est pas affiché pour la première question -->
+        <button v-if="currentQuestionIndex > 0" @click="previousQuestion">Précédent</button>
+        <!-- Bouton Suivant -->
         <button @click="nextQuestion">Suivant</button>
       </div>
-  
-
       <Results v-else :score="score" :questions="questions" :userAnswers="userAnswers" />
     </div>
   </template>
@@ -34,33 +34,40 @@
     },
     computed: {
       currentQuestion() {
-    
         return this.questions[this.currentQuestionIndex] || null;
       },
       isQuizCompleted() {
-     
         return this.currentQuestionIndex >= this.questions.length;
       },
     },
     methods: {
       nextQuestion() {
-        this.currentQuestionIndex++;
+        if (this.currentQuestionIndex < this.questions.length) {
+          this.currentQuestionIndex++;
+        }
+      },
+      previousQuestion() {
+        if (this.currentQuestionIndex > 0) {
+          this.currentQuestionIndex--;
+        }
       },
       handleAnswer(answer, isCorrect) {
-        // Enregistre la réponse de l'utilisateur
-        this.userAnswers.push({
+        // Enregistre ou met à jour la réponse de l'utilisateur pour la question actuelle
+        this.userAnswers[this.currentQuestionIndex] = {
           userAnswer: answer.title,
           correctAnswer: this.questions[this.currentQuestionIndex].answers.find(a => a.correct).title,
           isCorrect: isCorrect
-        });
+        };
   
-        // Incrémente le score si la réponse est correcte
-        if (isCorrect) {
-          this.score++;
-        }
+        // Incrémente le score si la réponse est correcte, ajuste si la réponse est changée
+        this.updateScore();
   
-        // Passe à la question suivante ou termine le quiz
+        // Passe à la question suivante
         this.nextQuestion();
+      },
+      updateScore() {
+        // Réinitialise le score et le recalcul à partir de userAnswers à chaque réponse
+        this.score = this.userAnswers.filter(answer => answer.isCorrect).length;
       },
     },
   };
