@@ -1,6 +1,6 @@
 <template>
     <div>
-      <button v-for="answer in answers" :key="answer.id" @click="selectAnswer(answer.correct)">
+      <button v-for="answer in answers" :key="answer.id" @click="selectAnswer(answer)">
         {{ answer.title }}
       </button>
     </div>
@@ -10,8 +10,8 @@
   export default {
     props: ['answers'],
     methods: {
-      selectAnswer(isCorrect) {
-        this.$emit('selectAnswer', isCorrect);
+      selectAnswer(answer) {
+        this.$emit('selectAnswer', answer, answer.correct);
       },
     },
   };

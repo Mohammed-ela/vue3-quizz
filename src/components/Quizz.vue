@@ -1,9 +1,14 @@
 <template>
     <div>
-      <Question :title="currentQuestion.title" />
-      <Answers :answers="currentQuestion.answers" @selectAnswer="handleAnswer" />
-      <button v-if="!isQuizCompleted" @click="nextQuestion">Suivant</button>
-      <Results v-if="isQuizCompleted" :score="score" :questions="questions" />
+
+      <div v-if="!isQuizCompleted">
+        <Question :title="currentQuestion.title" />
+        <Answers :answers="currentQuestion.answers" @selectAnswer="handleAnswer" />
+        <button @click="nextQuestion">Suivant</button>
+      </div>
+  
+
+      <Results v-else :score="score" :questions="questions" :userAnswers="userAnswers" />
     </div>
   </template>
   
@@ -11,10 +16,14 @@
   import Question from './Question.vue';
   import Answers from './Answers.vue';
   import Results from './Results.vue';
-  import quizData from '../data/halloween.json';
-
+  import quizData from '../data/halloween.json'; 
+  
   export default {
-    components: { Question, Answers, Results },
+    components: {
+      Question,
+      Answers,
+      Results
+    },
     data() {
       return {
         questions: quizData,
@@ -25,23 +34,32 @@
     },
     computed: {
       currentQuestion() {
-        return this.questions[this.currentQuestionIndex];
+    
+        return this.questions[this.currentQuestionIndex] || null;
       },
       isQuizCompleted() {
+     
         return this.currentQuestionIndex >= this.questions.length;
       },
     },
     methods: {
       nextQuestion() {
-        if (this.currentQuestionIndex < this.questions.length - 1) {
-          this.currentQuestionIndex++;
-        }
+        this.currentQuestionIndex++;
       },
-      handleAnswer(isCorrect) {
-        this.userAnswers.push(isCorrect);
+      handleAnswer(answer, isCorrect) {
+        // Enregistre la réponse de l'utilisateur
+        this.userAnswers.push({
+          userAnswer: answer.title,
+          correctAnswer: this.questions[this.currentQuestionIndex].answers.find(a => a.correct).title,
+          isCorrect: isCorrect
+        });
+  
+        // Incrémente le score si la réponse est correcte
         if (isCorrect) {
           this.score++;
         }
+  
+        // Passe à la question suivante ou termine le quiz
         this.nextQuestion();
       },
     },
