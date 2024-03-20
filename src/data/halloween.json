@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Le noir et l’orange symbolisent la noirceur et les moissons.",
+    "answers": [
+      {
+        "id": 1,
+        "title": "Vrai",
+        "correct": true
+      },
+      {
+        "id": 2,
+        "title": "Faux",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "À l’époque médiévale, les Celtes célébraient l’Halloween avec un grand feu qui attirait les chauves-souris",
+    "answers": [
+      {
+        "id": 1,
+        "title": "Vrai",
+        "correct": true
+      },
+      {
+        "id": 2,
+        "title": "Faux",
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "De nos jours, on se déguise à l’Halloween pour éloigner les mauvais esprits.",
+    "answers": [
+      {
+        "id": 1,
+        "title": "Vrai",
+        "correct": false
+      },
+      {
+        "id": 2,
+        "title": "Faux",
+        "correct": true
+      }
+    ]
+  }
+]
